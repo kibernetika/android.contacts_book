@@ -3,8 +3,8 @@ package com.android.sg.contacts.model;
 import java.util.ArrayList;
 
 public class ContactListLoad {
-    private ArrayList <ModelContactListFull> contactListFull;
-    private ArrayList <ModelContactListShort> contactListShort;
+    private ArrayList <ModelContactListFull> contactListFull = new ArrayList<>();
+    private ArrayList <ModelContactListShort> contactListShort = new ArrayList<>();
 
     public ContactListLoad() {
         contactListFull.add(new ModelContactListFull("Pasha","Deni","093-155-91-52", new String[] {"C#","MySQL","WEB"},""));
