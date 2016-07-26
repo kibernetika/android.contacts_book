@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Contacts book</string>
+    <string name="contact_name">Name</string>
+    <string name="contact_surname">Surname book</string>
+    <string name="contact_skills">Skills</string>
+    <string name="contact_phone">Phone</string>
+</resources>
