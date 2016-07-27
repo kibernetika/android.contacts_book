@@ -18,7 +18,7 @@ public class ContactListLoad {
         ArrayList <ModelContactListShort> contactListShorts = new ArrayList<ModelContactListShort>();
         for (ModelContactListFull contact: contactListFull) {
             contactListShorts.add(new ModelContactListShort(
-                    contact.getName(),contact.getSurName(),contact.getSkills()
+                    contact.getName() + " " + contact.getSurName(), contact.skillsAsString()
             ));
         }
         return contactListShorts;

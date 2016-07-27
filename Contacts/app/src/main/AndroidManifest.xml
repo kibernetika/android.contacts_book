@@ -15,7 +15,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.ContactInfo"></activity>
+        <activity
+            android:name=".controller.ContactInfo"
+            android:finishOnTaskLaunch="true"></activity>
     </application>
 
 </manifest>

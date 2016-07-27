@@ -57,4 +57,12 @@ public class ModelContactListFull {
         this.imagePath = imagePath;
     }
 
+    public String skillsAsString() {
+        String skill = "";
+        for (int i = 0; i < skills.length; i++) {
+            skill += skills[i] + ", ";
+        }
+        skill = skill.substring(0, skill.length() - 2);
+        return skill;
+    }
 }

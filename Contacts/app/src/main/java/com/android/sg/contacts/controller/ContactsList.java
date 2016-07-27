@@ -4,47 +4,57 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.android.sg.contacts.R;
 import com.android.sg.contacts.model.ContactListLoad;
 import com.android.sg.contacts.model.ModelContactListShort;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-public class ContactsList extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class ContactsList extends AppCompatActivity {
 
-    protected ListView listView;
+    private LinearLayout listContacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_list);
-        listView = (ListView)findViewById(R.id.listView);
-        listView.setOnItemClickListener(this);
-        listLoad(listView);
+        listContacts = (LinearLayout) findViewById(R.id.contacts_list_view);
+        listContactsLoad();
     }
 
-    protected void listLoad(ListView listView){
+    protected void listContactsLoad() {
         ArrayList<ModelContactListShort> contactListShorts = new ContactListLoad().loadShortList();
-        ArrayList<String> names = new ArrayList<>();
-        ArrayList<String> skills = new ArrayList<>();
         for (ModelContactListShort contact: contactListShorts){
-            names.add(contact.getName()+" "+contact.getSurName());
-            skills.add(Arrays.toString(contact.getSkills()));
+            containerContactCreate(contact.getName(), contact.getSkills());
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1, names);
-        listView.setAdapter(adapter);
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+    protected void containerContactCreate(String name, String contact) {
+        LinearLayout.LayoutParams containerParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        View view = getLayoutInflater().inflate(R.layout.contact_short, null);
+        TextView text = (TextView) view.findViewById(R.id.label_contact_name);
+        text.setText(name);
+        TextView text2 = (TextView) view.findViewById(R.id.label_contact_skills);
+        text2.setText(contact);
+        listContacts.addView(view, containerParams);
+//        LinearLayout containerContact = new LinearLayout(this);
+//        containerContact.setOrientation(LinearLayout.VERTICAL);
+//        containerContact.setPadding(5,5,5,5);
+//        containerContact.setBackgroundResource(R.color.colorBacgroundContact);
+//        containerContact.layout(3,3,3,3);
+//        listContacts.addView(containerContact, containerParams);
+//        Button btnNew = new Button(this);
+//        btnNew.setText("test button");
+//        listContacts.addView(btnNew);
+    }
+
+    public void onClickListItem(View view) {
         Intent intent = new Intent(this,ContactInfo.class);
-        intent.putExtra("id_contact", listView.getSelectedItemId());
+        intent.putExtra("id_contact", 100500);
         startActivity(intent);
     }
-
 }
