@@ -31,4 +31,8 @@ public class ContactListLoad {
     public ArrayList<ModelContactListFull> loadFullList() {
         return contactListFull;
     }
+
+    public ArrayList<ModelContactListFull> saveFullList() {
+        return contactListFull;
+    }
 }
