@@ -1,6 +1,7 @@
 package com.android.sg.contacts.model;
 
 public class ModelContactListFull {
+
     public ModelContactListFull() {}
 
     public ModelContactListFull(String name, String surName, String phone, String[] skills, String imagePath) {

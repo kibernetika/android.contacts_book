@@ -1,6 +1,8 @@
 package com.android.sg.contacts.controller;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,17 +14,26 @@ import com.android.sg.contacts.R;
 import com.android.sg.contacts.model.ContactListLoad;
 import com.android.sg.contacts.model.ModelContactListFull;
 import com.android.sg.contacts.model.ModelContactListShort;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ContactsList extends AppCompatActivity {
 
     private LinearLayout listContacts;
+    private SharedPreferences mSettings;
     public ArrayList<ModelContactListFull> contactListFull = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mSettings = getSharedPreferences("db", Context.MODE_PRIVATE);
+        if (mSettings.contains("db")) {
+            Set<String> contactsJSON = mSettings.getStringSet("db", null);
+            JSONtoArray(contactsJSON);
+        }
         setContentView(R.layout.activity_contacts_list);
         listContacts = (LinearLayout) findViewById(R.id.contacts_list_view);
         listContactsLoad();
@@ -54,8 +65,36 @@ public class ContactsList extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onPause() {
+        SharedPreferences.Editor editor = mSettings.edit();
+        editor.putStringSet("db", arrayToJSON());
+        editor.apply();
+        super.onPause();
+    }
 
+    @Override
+    protected void onDestroy() {
+        SharedPreferences.Editor editor = mSettings.edit();
+        editor.putStringSet("db", arrayToJSON());
+        editor.apply();
         super.onDestroy();
+    }
+
+    protected Set<String> arrayToJSON() {
+        Set<String> setContactJSON = new HashSet<>();
+        Gson gson = new Gson();
+        for (ModelContactListFull contact : contactListFull) {
+            String contactInJSON = gson.toJson(contact);
+            setContactJSON.add(contactInJSON);
+        }
+        return setContactJSON;
+    }
+
+    protected void JSONtoArray(Set<String> setContactJSON) {
+        Gson gson = new Gson();
+        for (String contact : setContactJSON) {
+            ModelContactListFull contactInJSON = gson.fromJson(contact, ModelContactListFull.class);
+            contactListFull.add(contactInJSON);
+        }
     }
 }

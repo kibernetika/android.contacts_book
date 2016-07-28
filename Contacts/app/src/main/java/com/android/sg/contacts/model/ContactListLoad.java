@@ -32,7 +32,19 @@ public class ContactListLoad {
         return contactListFull;
     }
 
-    public ArrayList<ModelContactListFull> saveFullList() {
-        return contactListFull;
+    public void saveFullList() {
+
+//        sPref = getPreferences(MODE_PRIVATE);
+//        SharedPreferences.Editor ed = sPref.edit();
+//        ed.putString(SAVED_TEXT, etText.getText().toString());
+//        ed.commit();
+//        Toast.makeText(this, "Text saved", Toast.LENGTH_SHORT).show();
     }
+
+//    void loadText() {
+//        sPref = getPreferences(MODE_PRIVATE);
+//        String savedText = sPref.getString(SAVED_TEXT, "");
+//        etText.setText(savedText);
+//        Toast.makeText(this, "Text loaded", Toast.LENGTH_SHORT).show();
+//    }
 }
