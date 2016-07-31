@@ -49,6 +49,10 @@ public class ContactListDAO {
         if (mSettings.contains(FileName)) {
             Set<String> contactsJSON = mSettings.getStringSet(FileName, null);
             return JSONtoContacts(contactsJSON);
-        } else return null;
+        } else {
+            ArrayList<ModelContactListFull> contactsList = new ArrayList<>();
+            contactsList.add(new ModelContactListFull("TestName", "TestSurName", "012-345-67-89", new String[]{"C#", "MySQL", "WEB"}, "@mipmap/contact_photo"));
+            return contactsList;
+        }
     }
 }

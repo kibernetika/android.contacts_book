@@ -86,8 +86,7 @@
         android:layout_row="9"
         android:layout_column="0"
         android:layout_gravity="top"
-        android:layout_margin="5dp"
-        android:editable="false" />
+        android:layout_margin="5dp" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -101,19 +100,32 @@
         android:layout_gravity="left|bottom"
         android:layout_margin="5dp"
         android:src="@mipmap/back"
-        android:onClick="backButtonClick" />
+        android:onClick="buttonBackClick" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button_next"
+        android:id="@+id/button_save"
+        android:layout_column="0"
+        android:background="@android:color/transparent"
+        android:layout_marginLeft="10dp"
+        android:layout_margin="5dp"
+        android:src="@mipmap/ok"
+        android:layout_gravity="bottom|center_horizontal"
+        android:visibility="invisible" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_cancel"
         android:layout_column="0"
         android:layout_centerVertical="true"
         android:background="@android:color/transparent"
         android:layout_marginLeft="10dp"
         android:layout_gravity="right|bottom"
         android:layout_margin="5dp"
-        android:src="@mipmap/next"
-        android:onClick="nextButtonClick" />
+        android:src="@mipmap/remove"
+        android:onClick="buttonCancelClick"
+        android:visibility="invisible" />
 
 </GridLayout>

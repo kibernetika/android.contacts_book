@@ -24,6 +24,7 @@ public class ContactsList extends AppCompatActivity {
     public ArrayList<ModelContactListFull> contactListFull = new ArrayList<>();
     String fileNameContactsList = "db";
     SharedPreferences mSettings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,14 +35,23 @@ public class ContactsList extends AppCompatActivity {
         ContactsListLoadToViewList();
     }
 
-    protected void ContactsListLoadToViewList() {
+    public void onClickListItem(View view) {
+        Intent intent = new Intent(this, ContactInfo.class);
+        int id = view.getId() * -1 - 1;
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("id_contact", (Serializable) contactListFull.get(id));
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    private void ContactsListLoadToViewList() {
         ArrayList<ModelContactListShort> contactListShorts = ContactListDAO.createShortList(contactListFull);
         for (int i = 0; i < contactListShorts.size(); i++) {
             containerContactCreate(contactListShorts.get(i).getName(), contactListShorts.get(i).getSkills(), i + 1);
         }
     }
 
-    protected void containerContactCreate(String name, String contact, int id) {
+    private void containerContactCreate(String name, String contact, int id) {
         View view = getLayoutInflater().inflate(R.layout.contact_short, null);
         TextView text = (TextView) view.findViewById(R.id.label_contact_name);
         text.setText(name);
@@ -51,15 +61,6 @@ public class ContactsList extends AppCompatActivity {
         listContacts.addView(view, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
     }
 
-    public void onClickListItem(View view) {
-        Intent intent = new Intent(this,ContactInfo.class);
-        int id = view.getId() * -1 - 1;
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("id_contact", (Serializable) contactListFull.get(id));
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
-
     @Override
     protected void onPause() {
         SharedPreferences mSettings = getSharedPreferences(fileNameContactsList, Context.MODE_PRIVATE);
@@ -67,4 +68,9 @@ public class ContactsList extends AppCompatActivity {
         super.onPause();
     }
 
+    public void buttonAddClick(View view) {
+        Intent intent = new Intent(this, ContactInfo.class);
+        intent.putExtra("Edit", false);
+        startActivity(intent);
+    }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.android.sg.contacts.R;
@@ -24,43 +25,80 @@ public class ContactInfo extends AppCompatActivity {
         surName = (TextView) findViewById(R.id.et_contact_surname);
         phone = (TextView) findViewById(R.id.et_contact_phone);
         skills = (TextView) findViewById(R.id.et_contact_skills);
-        editTextReadOnly();
-        editTextLoadData();
+        Bundle bundle = getIntent().getExtras();
+        if ((bundle != null) && (bundle.containsKey("id_contact"))) {
+            editTextLoadData(bundle);
+            editTextReadOnly(true);
+        } else {
+            editTextClearData();
+            editTextReadOnly(false);
+            editButtonCreate(this.getIntent().getBooleanExtra("edit", false));
+        }
     }
 
-    public void backButtonClick(View view) {
+    public void buttonBackClick(View view) {
         Intent intent = new Intent(this, ContactsList.class);
         startActivity(intent);
     }
 
-    protected void editButtonCreate() {
-//        LinearLayout containerContact = new LinearLayout(this);
-//        containerContact.setOrientation(LinearLayout.VERTICAL);
-//        containerContact.setPadding(5,5,5,5);
-//        containerContact.setBackgroundResource(R.color.colorBacgroundContact);
-//        containerContact.layout(3,3,3,3);
-//        listContacts.addView(containerContact, containerParams);
-//        Button btnNew = new Button(this);
-//        btnNew.setText("test button");
-//        listContacts.addView(btnNew);
+    public void buttonSaveClickAdd(View view) {
+
     }
 
-    protected void editTextReadOnly() {
-        int type = View.LAYER_TYPE_NONE;
+    public void buttonSaveClickEdit(View view) {
+
+    }
+
+    public void buttonCancelClick(View view) {
+        buttonBackClick(view);
+    }
+
+    protected void editButtonCreate(boolean edit) {
+        ImageButton buttonCancel = (ImageButton) findViewById(R.id.button_cancel);
+        buttonCancel.setVisibility(View.VISIBLE);
+        ImageButton buttonSave = (ImageButton) findViewById(R.id.button_save);
+        buttonSave.setVisibility(View.VISIBLE);
+        if (edit) {
+            buttonSave.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    buttonSaveClickEdit(view);
+                }
+            });
+        } else {
+            buttonSave.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    buttonSaveClickAdd(view);
+                }
+            });
+        }
+    }
+
+    protected void editTextReadOnly(boolean readOff) {
+        int type = -1;
+        if (readOff) {
+            type = View.LAYER_TYPE_NONE;
+        } else {
+            type = View.LAYER_TYPE_SOFTWARE;
+        }
         name.setInputType(type);
         surName.setInputType(type);
         phone.setInputType(type);
         skills.setInputType(type);
     }
 
-    private void editTextLoadData() {
-        Intent intent = this.getIntent();
-        Bundle bundle = intent.getExtras();
+    private void editTextLoadData(Bundle bundle) {
         ModelContactListFull contact = (ModelContactListFull) bundle.getSerializable("id_contact");
         name.setText(contact.getName());
         surName.setText(contact.getSurName());
         phone.setText(contact.getPhone());
         skills.setText(contact.skillsAsString());
+    }
+
+    private void editTextClearData() {
+        name.setText("");
+        surName.setText("");
+        phone.setText("");
+        skills.setText("");
     }
 
 }
