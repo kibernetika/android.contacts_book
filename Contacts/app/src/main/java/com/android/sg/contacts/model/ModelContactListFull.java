@@ -1,6 +1,8 @@
 package com.android.sg.contacts.model;
 
-public class ModelContactListFull {
+import java.io.Serializable;
+
+public class ModelContactListFull implements Serializable {
 
     public ModelContactListFull() {}
 

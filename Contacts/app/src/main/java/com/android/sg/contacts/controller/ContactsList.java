@@ -11,38 +11,31 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.sg.contacts.R;
-import com.android.sg.contacts.model.ContactListLoad;
+import com.android.sg.contacts.model.ContactListDAO;
 import com.android.sg.contacts.model.ModelContactListFull;
 import com.android.sg.contacts.model.ModelContactListShort;
-import com.google.gson.Gson;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 public class ContactsList extends AppCompatActivity {
 
     private LinearLayout listContacts;
-    private SharedPreferences mSettings;
     public ArrayList<ModelContactListFull> contactListFull = new ArrayList<>();
-
+    String fileNameContactsList = "db";
+    SharedPreferences mSettings;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSettings = getSharedPreferences("db", Context.MODE_PRIVATE);
-        if (mSettings.contains("db")) {
-            Set<String> contactsJSON = mSettings.getStringSet("db", null);
-            JSONtoArray(contactsJSON);
-        }
+        mSettings = getSharedPreferences(fileNameContactsList, Context.MODE_PRIVATE);
+        contactListFull = ContactListDAO.ContactsListLoadFromFile(mSettings, fileNameContactsList);
         setContentView(R.layout.activity_contacts_list);
         listContacts = (LinearLayout) findViewById(R.id.contacts_list_view);
-        listContactsLoad();
+        ContactsListLoadToViewList();
     }
 
-    protected void listContactsLoad() {
-        ContactListLoad contactListLoad = new ContactListLoad();
-        contactListFull = contactListLoad.loadFullList();
-        ArrayList<ModelContactListShort> contactListShorts = contactListLoad.loadShortList();
+    protected void ContactsListLoadToViewList() {
+        ArrayList<ModelContactListShort> contactListShorts = ContactListDAO.createShortList(contactListFull);
         for (int i = 0; i < contactListShorts.size(); i++) {
             containerContactCreate(contactListShorts.get(i).getName(), contactListShorts.get(i).getSkills(), i + 1);
         }
@@ -60,41 +53,18 @@ public class ContactsList extends AppCompatActivity {
 
     public void onClickListItem(View view) {
         Intent intent = new Intent(this,ContactInfo.class);
-        intent.putExtra("id_contact", view.getId());
+        int id = view.getId() * -1 - 1;
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("id_contact", (Serializable) contactListFull.get(id));
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
     @Override
     protected void onPause() {
-        SharedPreferences.Editor editor = mSettings.edit();
-        editor.putStringSet("db", arrayToJSON());
-        editor.apply();
+        SharedPreferences mSettings = getSharedPreferences(fileNameContactsList, Context.MODE_PRIVATE);
+        ContactListDAO.ContactsListSaveToFile(mSettings, fileNameContactsList, contactListFull);
         super.onPause();
     }
 
-    @Override
-    protected void onDestroy() {
-        SharedPreferences.Editor editor = mSettings.edit();
-        editor.putStringSet("db", arrayToJSON());
-        editor.apply();
-        super.onDestroy();
-    }
-
-    protected Set<String> arrayToJSON() {
-        Set<String> setContactJSON = new HashSet<>();
-        Gson gson = new Gson();
-        for (ModelContactListFull contact : contactListFull) {
-            String contactInJSON = gson.toJson(contact);
-            setContactJSON.add(contactInJSON);
-        }
-        return setContactJSON;
-    }
-
-    protected void JSONtoArray(Set<String> setContactJSON) {
-        Gson gson = new Gson();
-        for (String contact : setContactJSON) {
-            ModelContactListFull contactInJSON = gson.fromJson(contact, ModelContactListFull.class);
-            contactListFull.add(contactInJSON);
-        }
-    }
 }

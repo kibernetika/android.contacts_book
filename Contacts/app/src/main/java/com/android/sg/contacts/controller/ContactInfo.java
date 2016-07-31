@@ -7,10 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.android.sg.contacts.R;
-import com.android.sg.contacts.model.ContactListLoad;
 import com.android.sg.contacts.model.ModelContactListFull;
-
-import java.util.ArrayList;
 
 public class ContactInfo extends AppCompatActivity {
 
@@ -57,8 +54,9 @@ public class ContactInfo extends AppCompatActivity {
     }
 
     private void editTextLoadData() {
-        ArrayList<ModelContactListFull> contactListFull = new ContactListLoad().loadFullList();
-        ModelContactListFull contact = contactListFull.get(-1 * getIntent().getIntExtra("id_contact", -1) - 1);
+        Intent intent = this.getIntent();
+        Bundle bundle = intent.getExtras();
+        ModelContactListFull contact = (ModelContactListFull) bundle.getSerializable("id_contact");
         name.setText(contact.getName());
         surName.setText(contact.getSurName());
         phone.setText(contact.getPhone());
