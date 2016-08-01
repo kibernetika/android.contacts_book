@@ -4,13 +4,15 @@ public class ModelContactListShort {
 
     public ModelContactListShort() {}
 
-    public ModelContactListShort(String name, String skills) {
+    public ModelContactListShort(String name, String skills, String photo) {
         this.name = name;
         this.skills = skills;
+        this.photo = photo;
     }
 
     private String name;
     private String skills;
+    private String photo;
 
     public String getName() {
         return name;
@@ -28,4 +30,11 @@ public class ModelContactListShort {
         this.skills = skills;
     }
 
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 }

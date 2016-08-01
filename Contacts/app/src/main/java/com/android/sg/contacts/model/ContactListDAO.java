@@ -14,7 +14,8 @@ public class ContactListDAO {
         if (contactsList == null) return null;
         ArrayList<ModelContactListShort> contactListShorts = new ArrayList<ModelContactListShort>();
         for (ModelContactListFull contact : contactsList) {
-            contactListShorts.add(new ModelContactListShort(contact.getName() + " " + contact.getSurName(), contact.skillsAsString()));
+            contactListShorts.add(new ModelContactListShort(
+                    contact.getName() + " " + contact.getSurName(), contact.skillsAsString(), contact.getImagePath()));
         }
         return contactListShorts;
     }
