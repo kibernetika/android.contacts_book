@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.android.sg.contacts.R;
 import com.android.sg.contacts.model.ModelContactListFull;
 
+import java.io.Serializable;
+
 public class ContactInfo extends AppCompatActivity {
 
     public TextView name;
@@ -38,11 +40,22 @@ public class ContactInfo extends AppCompatActivity {
 
     public void buttonBackClick(View view) {
         Intent intent = new Intent(this, ContactsList.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
     public void buttonSaveClickAdd(View view) {
-
+        ModelContactListFull contact = new ModelContactListFull();
+        contact.setName(name.getText().toString());
+        contact.setSurName(surName.getText().toString());
+        contact.setPhone(phone.getText().toString());
+        String skills = this.skills.getText().toString();
+        contact.setSkills(skills.split(","));
+        Intent intent = new Intent(this, ContactsList.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("contact", (Serializable) contact);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     public void buttonSaveClickEdit(View view) {

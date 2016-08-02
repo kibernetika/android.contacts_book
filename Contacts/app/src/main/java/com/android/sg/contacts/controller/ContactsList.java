@@ -34,7 +34,8 @@ public class ContactsList extends AppCompatActivity {
 
     public void onClickListItem(View view) {
         Intent intent = new Intent(this, ContactInfo.class);
-        int id = view.getId() * -1 - 1;
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        int id = (view.getId() * -1) - 1;
         Bundle bundle = new Bundle();
         bundle.putSerializable("id_contact", (Serializable) contactListFull.get(id));
         intent.putExtras(bundle);
@@ -46,7 +47,6 @@ public class ContactsList extends AppCompatActivity {
         setContentView(R.layout.activity_contacts_list);
         listContacts = (ListView) findViewById(R.id.contacts_list);
         listContacts.setAdapter(new ContactListShortAdapter(this, contactListShorts));
-
     }
 
     @Override
@@ -58,7 +58,23 @@ public class ContactsList extends AppCompatActivity {
 
     public void buttonAddClick(View view) {
         Intent intent = new Intent(this, ContactInfo.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         intent.putExtra("Edit", false);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Bundle bundle = getIntent().getExtras();
+        if ((bundle != null) && (bundle.containsKey("contact"))) {
+            ModelContactListFull contact = (ModelContactListFull) bundle.getSerializable("contact");
+            contactListFull.add(contact);
+            ContactsListLoadToViewList();
+        }
+    }
+
+    public void buttonExitClick(View view) {
+        finish();
     }
 }

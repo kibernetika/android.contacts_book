@@ -57,16 +57,11 @@ public class ContactListShortAdapter extends BaseAdapter {
         holder.nameFull = (TextView) contact.findViewById(R.id.label_contact_name);
         holder.skills = (TextView) contact.findViewById(R.id.label_contact_skills);
 
-        holder.photo.setBackground(null);
+        holder.photo.setImageResource(R.mipmap.contact_photo);
         holder.nameFull.setText(contactsArray.get(i).getName());
         holder.skills.setText(contactsArray.get(i).getSkills());
+        contact.setId((i + 1) * -1);
 
-        contact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //
-            }
-        });
         return contact;
     }
 }
