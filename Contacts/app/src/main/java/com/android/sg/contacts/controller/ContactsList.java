@@ -33,45 +33,70 @@ public class ContactsList extends AppCompatActivity {
     }
 
     public void onClickListItem(View view) {
-        Intent intent = new Intent(this, ContactInfo.class);
+        final Intent intent = new Intent(this, ContactInfo.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         int id = (view.getId() * -1) - 1;
         Bundle bundle = new Bundle();
         bundle.putSerializable("id_contact", (Serializable) contactListFull.get(id));
         intent.putExtras(bundle);
-        startActivity(intent);
+        new Thread(new Runnable() {
+            public void run() {
+                startActivity(intent);
+            }
+
+            ;
+        }).start();
     }
 
     private void ContactsListLoadToViewList() {
-        ArrayList<ModelContactListShort> contactListShorts = ContactListDAO.createShortList(contactListFull);
         setContentView(R.layout.activity_contacts_list);
         listContacts = (ListView) findViewById(R.id.contacts_list);
+        ArrayList<ModelContactListShort> contactListShorts = ContactListDAO.createShortList(contactListFull);
         listContacts.setAdapter(new ContactListShortAdapter(this, contactListShorts));
     }
 
     @Override
     protected void onPause() {
-        SharedPreferences mSettings = getSharedPreferences(fileNameContactsList, Context.MODE_PRIVATE);
-        ContactListDAO.ContactsListSaveToFile(mSettings, fileNameContactsList, contactListFull);
+        new Thread(new Runnable() {
+            public void run() {
+                SharedPreferences mSettings = getSharedPreferences(fileNameContactsList, Context.MODE_PRIVATE);
+                ContactListDAO.ContactsListSaveToFile(mSettings, fileNameContactsList, contactListFull);
+            }
+
+            ;
+        }).start();
         super.onPause();
     }
 
     public void buttonAddClick(View view) {
-        Intent intent = new Intent(this, ContactInfo.class);
+        final Intent intent = new Intent(this, ContactInfo.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         intent.putExtra("Edit", false);
-        startActivity(intent);
+        new Thread(new Runnable() {
+            public void run() {
+                startActivity(intent);
+            }
+
+            ;
+        }).start();
+        super.onPause();
     }
 
     @Override
     protected void onResume() {
+        new Thread(new Runnable() {
+            public void run() {
+                Bundle bundle = getIntent().getExtras();
+                if ((bundle != null) && (bundle.containsKey("contact"))) {
+                    ModelContactListFull contact = (ModelContactListFull) bundle.getSerializable("contact");
+                    contactListFull.add(contact);
+                    ContactsListLoadToViewList();
+                }
+            }
+
+            ;
+        }).start();
         super.onResume();
-        Bundle bundle = getIntent().getExtras();
-        if ((bundle != null) && (bundle.containsKey("contact"))) {
-            ModelContactListFull contact = (ModelContactListFull) bundle.getSerializable("contact");
-            contactListFull.add(contact);
-            ContactsListLoadToViewList();
-        }
     }
 
     public void buttonExitClick(View view) {

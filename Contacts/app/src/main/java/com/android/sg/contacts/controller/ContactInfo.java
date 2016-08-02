@@ -29,8 +29,9 @@ public class ContactInfo extends AppCompatActivity {
         skills = (TextView) findViewById(R.id.et_contact_skills);
         Bundle bundle = getIntent().getExtras();
         if ((bundle != null) && (bundle.containsKey("id_contact"))) {
-            editTextLoadData(bundle);
             editTextReadOnly(true);
+            editTextLoadData(bundle);
+
         } else {
             editTextClearData();
             editTextReadOnly(false);
@@ -55,6 +56,7 @@ public class ContactInfo extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putSerializable("contact", (Serializable) contact);
         intent.putExtras(bundle);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
