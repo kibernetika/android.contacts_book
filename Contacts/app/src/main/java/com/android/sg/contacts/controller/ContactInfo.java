@@ -31,7 +31,6 @@ public class ContactInfo extends AppCompatActivity {
         if ((bundle != null) && (bundle.containsKey("id_contact"))) {
             editTextReadOnly(true);
             editTextLoadData(bundle);
-
         } else {
             editTextClearData();
             editTextReadOnly(false);
